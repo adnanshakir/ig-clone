@@ -1,45 +1,32 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://localhost:3000/api/posts",
   withCredentials: true,
 });
 
 export async function getFeed() {
-  const response = await api.get("/api/posts/feed");
+  const response = await api.get("/feed");
   return response.data;
 }
 
-// export async function createPost(file) {
-//   const response = await api.post("/upload", {
-//     file,
-//   });
+export async function createPost(imageFile, caption) {
+  const formData = new FormData();
 
-//   return response.data;
-// }
+  formData.append("image", imageFile);
+  formData.append("caption", caption);
 
-// export async function getPosts(userId) {
-//   const response = await api.get("/", {
-//     userId,
-//   });
+  const response = await api.post("/api/posts", formData);
 
-//   return response.data;
-// }
+  return response.data;
+}
 
-// export async function detailedPost(userId, postId) {
-//   const response = await api.get("/details/:postId", {
-//     userId,
-//     postId,
-//   });
+export async function likePost(postId) {
+  const response = await api.post("/like/" + postId);
+  return response.data;
+}
 
-//   return response.data;
-// }
-
-// export async function likePost(postId, username) {
-//   const response = await api.post("/like/:postId", {
-//     postId,
-//     username,
-//   });
-
-//   return response.data;
-// }
+export async function unlikePost(postId) {
+  const response = await api.post("/unlike/" + postId);
+  return response.data;
+}
